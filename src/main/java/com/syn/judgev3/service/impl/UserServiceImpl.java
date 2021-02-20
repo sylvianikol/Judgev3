@@ -1,8 +1,9 @@
-package com.syn.judgev3.service;
+package com.syn.judgev3.service.impl;
 
 import com.syn.judgev3.model.entity.User;
 import com.syn.judgev3.model.service.UserServiceModel;
 import com.syn.judgev3.repository.UserRepository;
+import com.syn.judgev3.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
