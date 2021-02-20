@@ -1,5 +1,6 @@
 package com.syn.judgev3.web;
 
+import com.syn.judgev3.model.binding.UserLoginBindingModel;
 import com.syn.judgev3.model.binding.UserRegisterBindingModel;
 import com.syn.judgev3.model.service.UserServiceModel;
 import com.syn.judgev3.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -61,5 +63,14 @@ public class UserController {
         }
 
         return "redirect:login";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model) {
+        if (!model.containsAttribute("userLoginBindingModel")) {
+            model.addAttribute("userLoginBindingModel", new UserLoginBindingModel());
+            model.addAttribute("notFound", false);
+        }
+        return "login";
     }
 }
