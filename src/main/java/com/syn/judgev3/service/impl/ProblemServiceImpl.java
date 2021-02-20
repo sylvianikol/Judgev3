@@ -42,4 +42,11 @@ public class ProblemServiceImpl implements ProblemService {
                 .map(t -> this.modelMapper.map(t, ProblemServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
     }
+
+    @Override
+    public ProblemServiceModel getById(String id) {
+        return this.problemRepository.findById(id)
+                .map(problem -> this.modelMapper.map(problem, ProblemServiceModel.class))
+                .orElse(null);
+    }
 }

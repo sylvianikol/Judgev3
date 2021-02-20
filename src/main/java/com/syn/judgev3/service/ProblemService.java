@@ -10,4 +10,6 @@ public interface ProblemService {
     boolean create(ProblemServiceModel problemServiceModel);
 
     List<ProblemServiceModel> getAll();
+
+    ProblemServiceModel getById(String id);
 }

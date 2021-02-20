@@ -2,6 +2,7 @@ package com.syn.judgev3.web;
 
 import com.syn.judgev3.model.binding.ProblemCreateBindingModel;
 import com.syn.judgev3.model.service.ProblemServiceModel;
+import com.syn.judgev3.model.view.ProblemViewModel;
 import com.syn.judgev3.service.ProblemService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,9 @@ public class ProblemController {
             return "redirect:/users/login";
         }
 
-//        ProblemServiceModel problemServiceModel = this.problemService.getById(id);
+        ProblemViewModel problem = this.modelMapper.map(this.problemService.getById(id), ProblemViewModel.class);
+        model.addAttribute("problem", problem);
+
         return "create-submission";
     }
 }
