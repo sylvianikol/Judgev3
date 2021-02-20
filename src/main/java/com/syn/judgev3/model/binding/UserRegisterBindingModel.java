@@ -1,5 +1,9 @@
 package com.syn.judgev3.model.binding;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class UserRegisterBindingModel {
 
     private String username;
@@ -13,6 +17,8 @@ public class UserRegisterBindingModel {
     public UserRegisterBindingModel() {
     }
 
+    @NotBlank(message = "Username can not be null or empty")
+    @Size(min = 3, max = 20, message = "Username length must be between 3 and 20 characters")
     public String getUsername() {
         return this.username;
     }
@@ -21,6 +27,8 @@ public class UserRegisterBindingModel {
         this.username = username;
     }
 
+    @NotBlank(message = "Password can not be null or empty")
+    @Size(min = 3, max = 20, message = "Password length must be between 3 and 20 characters ")
     public String getPassword() {
         return this.password;
     }
@@ -29,6 +37,8 @@ public class UserRegisterBindingModel {
         this.password = password;
     }
 
+    @NotBlank(message = "Password can not be null or empty")
+    @Size(min = 3, max = 20, message = "Password length must be between 3 and 20 characters ")
     public String getConfirmPassword() {
         return this.confirmPassword;
     }
@@ -37,6 +47,7 @@ public class UserRegisterBindingModel {
         this.confirmPassword = confirmPassword;
     }
 
+    @Email(message = "Email not valid")
     public String getEmail() {
         return this.email;
     }
