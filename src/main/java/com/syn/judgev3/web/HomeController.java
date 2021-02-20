@@ -23,9 +23,18 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index(HttpSession httpSession, Model model) {
+    public String index(HttpSession httpSession) {
+        if (httpSession.getAttribute("user") != null) {
+            return "redirect:home";
+        }
+
+        return "index";
+    }
+
+    @GetMapping("/home")
+    public String home(HttpSession httpSession, Model model) {
         if (httpSession.getAttribute("user") == null) {
-            return "index";
+            return "redirect:/users/login";
         }
 
         //TODO: this.problemService.getAllByUserId(userId);
