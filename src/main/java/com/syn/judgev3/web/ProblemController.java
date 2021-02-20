@@ -1,9 +1,12 @@
 package com.syn.judgev3.web;
 
 import com.syn.judgev3.model.binding.ProblemCreateBindingModel;
+import com.syn.judgev3.model.binding.SubmissionCreateBindingModel;
 import com.syn.judgev3.model.service.ProblemServiceModel;
+import com.syn.judgev3.model.service.SubmissionServiceModel;
 import com.syn.judgev3.model.view.ProblemViewModel;
 import com.syn.judgev3.service.ProblemService;
+import com.syn.judgev3.service.SubmissionService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,11 +26,13 @@ import javax.validation.Valid;
 public class ProblemController {
 
     private final ProblemService problemService;
+    private final SubmissionService submissionService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProblemController(ProblemService problemService, ModelMapper modelMapper) {
+    public ProblemController(ProblemService problemService, SubmissionService submissionService, ModelMapper modelMapper) {
         this.problemService = problemService;
+        this.submissionService = submissionService;
         this.modelMapper = modelMapper;
     }
 
@@ -72,7 +77,7 @@ public class ProblemController {
         return "redirect:/";
     }
 
-    @GetMapping("/submit/{id}")
+    @GetMapping("/submit/{problemId}")
     public String submit(@PathVariable String id, HttpSession httpSession, Model model) {
 
         if (httpSession.getAttribute("user") == null) {
@@ -85,8 +90,21 @@ public class ProblemController {
         return "create-submission";
     }
 
-    @PostMapping("/submit/{id}")
-    public String submitConfirm(@Valid ) {
+    @PostMapping("/submit/{problemId}")
+    public String submitConfirm(@PathVariable String problemId,
+                                @Valid SubmissionCreateBindingModel submissionCreateBindingModel,
+                                BindingResult bindingResult,
+                                RedirectAttributes redirectAttributes) {
 
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("submissionCreateBindingModel", submissionCreateBindingModel);
+            redirectAttributes.addFlashAttribute(
+                    "org.springframework.validation.BindingResult.submissionCreateBindingModel",
+                    bindingResult);
+
+            return "redirect:/submit/" + problemId;
+        }
+
+        return "";
     }
 }
