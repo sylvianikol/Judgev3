@@ -1,5 +1,7 @@
 package com.syn.judgev3.service.impl;
 
+import com.syn.judgev3.model.entity.Problem;
+import com.syn.judgev3.model.service.ProblemServiceModel;
 import com.syn.judgev3.repository.ProblemRepository;
 import com.syn.judgev3.service.ProblemService;
 import org.modelmapper.ModelMapper;
@@ -16,5 +18,18 @@ public class ProblemServiceImpl implements ProblemService {
     public ProblemServiceImpl(ProblemRepository problemRepository, ModelMapper modelMapper) {
         this.problemRepository = problemRepository;
         this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public boolean create(ProblemServiceModel problemServiceModel) {
+        Problem problem = this.modelMapper.map(problemServiceModel, Problem.class);
+
+        try {
+            this.problemRepository.save(problem);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 }
