@@ -42,7 +42,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel findByUsernameAndPassword(String username, String password) {
-        return this.userRepository.findByUsernameAndPassword(username, password)
+        String encodedPassword = DigestUtils.sha256Hex(password);
+        return this.userRepository.findByUsernameAndPassword(username, encodedPassword)
                 .map(user -> this.modelMapper.map(user, UserServiceModel.class))
                 .orElse(null);
     }
