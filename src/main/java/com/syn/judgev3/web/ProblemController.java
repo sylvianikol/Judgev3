@@ -84,4 +84,9 @@ public class ProblemController {
 
         return "create-submission";
     }
+
+    @PostMapping("/submit/{id}")
+    public String submitConfirm(@Valid ) {
+
+    }
 }
