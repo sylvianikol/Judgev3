@@ -73,4 +73,33 @@ public class UserController {
         }
         return "login";
     }
+
+    @PostMapping("/login")
+    public String loginConfirm(@Valid UserLoginBindingModel userLoginBindingModel,
+                               BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes,
+                               HttpSession httpSession) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
+            redirectAttributes.addFlashAttribute(
+                    "org.springframework.validation.BindingResult.userLoginBindingModel",
+                    bindingResult);
+
+            return "redirect:login";
+        }
+
+        UserServiceModel userServiceModel = this.userService.findByUsernameAndPassword(
+                userLoginBindingModel.getUsername(),
+                userLoginBindingModel.getPassword());
+
+        if (userServiceModel == null) {
+            redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
+            redirectAttributes.addFlashAttribute("notFound", true);
+            return "redirect:login";
+        }
+
+        httpSession.setAttribute("user", userServiceModel);
+
+        return "redirect:/";
+    }
 }
