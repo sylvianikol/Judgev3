@@ -10,4 +10,6 @@ public interface UserService {
     UserServiceModel createUser(UserServiceModel userServiceModel);
 
     UserServiceModel findByUsernameAndPassword(String username, String password);
+
+    UserServiceModel getById(String userId);
 }

@@ -47,4 +47,11 @@ public class UserServiceImpl implements UserService {
                 .map(user -> this.modelMapper.map(user, UserServiceModel.class))
                 .orElse(null);
     }
+
+    @Override
+    public UserServiceModel getById(String userId) {
+        return this.userRepository.findById(userId)
+                .map(user -> this.modelMapper.map(user, UserServiceModel.class))
+                .orElse(null);
+    }
 }

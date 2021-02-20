@@ -2,13 +2,12 @@ package com.syn.judgev3.model.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "submissions")
 public class Submission extends BaseEntity {
 
-    private List<String> code;
+    private String code;
     private int achievedResult;
     private LocalDateTime createdOn;
     private Problem problem;
@@ -17,12 +16,12 @@ public class Submission extends BaseEntity {
     public Submission() {
     }
 
-    @ElementCollection
-    public List<String> getCode() {
+    @Column(nullable = false, columnDefinition = "TEXT")
+    public String getCode() {
         return code;
     }
 
-    public void setCode(List<String> code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -44,7 +43,7 @@ public class Submission extends BaseEntity {
         this.createdOn = createdOn;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     public Problem getProblem() {
         return problem;
     }
@@ -53,7 +52,7 @@ public class Submission extends BaseEntity {
         this.problem = problem;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     public User getUser() {
         return user;
     }

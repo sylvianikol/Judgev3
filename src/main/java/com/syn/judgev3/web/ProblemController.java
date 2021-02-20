@@ -4,6 +4,7 @@ import com.syn.judgev3.model.binding.ProblemCreateBindingModel;
 import com.syn.judgev3.model.binding.SubmissionCreateBindingModel;
 import com.syn.judgev3.model.service.ProblemServiceModel;
 import com.syn.judgev3.model.service.SubmissionServiceModel;
+import com.syn.judgev3.model.service.UserServiceModel;
 import com.syn.judgev3.model.view.ProblemViewModel;
 import com.syn.judgev3.service.ProblemService;
 import com.syn.judgev3.service.SubmissionService;
@@ -78,13 +79,18 @@ public class ProblemController {
     }
 
     @GetMapping("/submit/{problemId}")
-    public String submit(@PathVariable String id, HttpSession httpSession, Model model) {
+    public String submit(@PathVariable String problemId, HttpSession httpSession, Model model) {
 
         if (httpSession.getAttribute("user") == null) {
             return "redirect:/users/login";
         }
 
-        ProblemViewModel problem = this.modelMapper.map(this.problemService.getById(id), ProblemViewModel.class);
+        if (!model.containsAttribute("submissionCreateBindingModel")) {
+            model.addAttribute("submissionCreateBindingModel", new SubmissionCreateBindingModel());
+            model.addAttribute("submitError", false);
+        }
+
+        ProblemViewModel problem = this.modelMapper.map(this.problemService.getById(problemId), ProblemViewModel.class);
         model.addAttribute("problem", problem);
 
         return "create-submission";
@@ -94,7 +100,8 @@ public class ProblemController {
     public String submitConfirm(@PathVariable String problemId,
                                 @Valid SubmissionCreateBindingModel submissionCreateBindingModel,
                                 BindingResult bindingResult,
-                                RedirectAttributes redirectAttributes) {
+                                RedirectAttributes redirectAttributes,
+                                HttpSession httpSession) {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("submissionCreateBindingModel", submissionCreateBindingModel);
@@ -102,9 +109,20 @@ public class ProblemController {
                     "org.springframework.validation.BindingResult.submissionCreateBindingModel",
                     bindingResult);
 
-            return "redirect:/submit/" + problemId;
+            return "redirect:/problems/submit/" + problemId;
         }
 
-        return "";
+        String userId = ((UserServiceModel) httpSession.getAttribute("user")).getId();
+
+        SubmissionServiceModel submission = this.submissionService
+                .create(submissionCreateBindingModel, problemId, userId);
+
+        if (submission == null) {
+            redirectAttributes.addFlashAttribute("submissionCreateBindingModel", submissionCreateBindingModel);
+            redirectAttributes.addFlashAttribute("submitError", true);
+            return "redirect:/problems/submit/" + problemId;
+        }
+
+        return "redirect:/submissions/details/" + submission.getId();
     }
 }

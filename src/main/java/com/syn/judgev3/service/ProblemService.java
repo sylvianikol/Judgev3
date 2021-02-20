@@ -1,5 +1,6 @@
 package com.syn.judgev3.service;
 
+import com.syn.judgev3.model.entity.Problem;
 import com.syn.judgev3.model.service.ProblemServiceModel;
 
 import java.util.Collection;

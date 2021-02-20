@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SubmissionServiceModel extends BaseServiceModel {
 
-    private List<String> code;
+    private String code;
     private int achievedResult;
     private LocalDateTime createdOn;
     private ProblemServiceModel problem;
@@ -14,11 +14,11 @@ public class SubmissionServiceModel extends BaseServiceModel {
     public SubmissionServiceModel() {
     }
 
-    public List<String> getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(List<String> code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

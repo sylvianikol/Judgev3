@@ -10,10 +10,12 @@
         <h1 class="text-center text-judge" th:text="*{name}">Problem - The Rounding of Isaac</h1>
         <hr class="hr-2 bg-judge">
         <h3 class="text-judge my-3">Submit your code here:</h3>
-        <form id="create-submission-form" class="form"
-              th:action="@{/problems/submit/{id}(id = *{id})}" method="POST">
+        <form id="create-submission-form" class="form" th:object="${submissionCreateBindingModel}"
+              th:action="@{/problems/submit/{id}(id = ${problem.id})}" method="POST">
+            <h5 th:if="${submitError}" class="bg-danger rounded">Error!</h5>
             <div class="w-100 rounded bg-code text-code d-flex flex-column p-3">
-                <textarea class="code"></textarea>
+                <textarea th:field="*{code}" th:errorclass="bg-danger" id="code" name="code" class="code"></textarea>
+                <small th:if="${#fields.hasErrors('code')}" th:errors="*{code}" class="text-danger">Code error message</small>
             </div>
             <hr class="hr-2 bg-judge">
             <div class="d-flex justify-content-center">
