@@ -8,6 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ProblemServiceImpl implements ProblemService {
 
@@ -31,5 +34,12 @@ public class ProblemServiceImpl implements ProblemService {
         }
 
         return true;
+    }
+
+    @Override
+    public List<ProblemServiceModel> getAll() {
+        return this.problemRepository.findAll().stream()
+                .map(t -> this.modelMapper.map(t, ProblemServiceModel.class))
+                .collect(Collectors.toUnmodifiableList());
     }
 }

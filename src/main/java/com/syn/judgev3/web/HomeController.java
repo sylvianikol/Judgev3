@@ -1,7 +1,8 @@
 package com.syn.judgev3.web;
 
+import com.syn.judgev3.model.service.UserServiceModel;
+import com.syn.judgev3.model.view.ProblemViewModel;
 import com.syn.judgev3.service.ProblemService;
-import com.syn.judgev3.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -33,12 +36,19 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(HttpSession httpSession, Model model) {
+
         if (httpSession.getAttribute("user") == null) {
             return "redirect:/users/login";
         }
 
-        //TODO: this.problemService.getAllByUserId(userId);
-        //TODO: model.addAttribute("problems", problems);
+        List<ProblemViewModel> problems = this.problemService.getAll().stream()
+                .map(p -> this.modelMapper.map(p, ProblemViewModel.class))
+                .collect(Collectors.toUnmodifiableList());
+
+        int completed = 0; // todo: calculate completed %
+
+        model.addAttribute("problems", problems);
+        model.addAttribute("completed", completed);
 
         return "home";
     }
