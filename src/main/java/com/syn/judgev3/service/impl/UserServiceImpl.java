@@ -31,9 +31,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserServiceModel createUser(UserServiceModel userServiceModel) {
         userServiceModel.setPassword(DigestUtils.sha256Hex(userServiceModel.getPassword()));
-        return this.modelMapper.map(
-                this.userRepository
-                .save(this.modelMapper.map(userServiceModel, User.class)),
-                        UserServiceModel.class);
+        try {
+            return this.modelMapper.map(
+                    this.userRepository.save(this.modelMapper.map(userServiceModel, User.class)),
+                    UserServiceModel.class);
+        } catch (Exception ex) {
+            return null;
+        }
     }
 }

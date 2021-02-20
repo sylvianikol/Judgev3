@@ -7,4 +7,5 @@ public interface UserService {
     UserServiceModel getUserByUsername(String username);
 
     UserServiceModel createUser(UserServiceModel userServiceModel);
+
 }
